@@ -30,14 +30,14 @@
     <artifactId>xnio-all</artifactId>
     <packaging>pom</packaging>
     <name>XNIO Parent POM</name>
-    <version>3.3.7.Final-ossnms-001</version>
+    <version>3.3.7.Final-ossnms-002-SNAPSHOT</version>
     <description>The aggregator POM of the XNIO project</description>
 
     <scm>
         <connection>scm:git:https://github.com/ossnms/xnio.git</connection>
         <developerConnection>scm:git:https://github.com/ossnms/xnio.git</developerConnection>
         <url>https://github.com/ossnms/xnio</url>
-      <tag>xnio-all-3.3.7.Final-ossnms-001</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <modules>
