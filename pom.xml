@@ -35,6 +35,12 @@
     <version>3.3.7.Final-ossnms-001-SNAPSHOT</version>
     <description>The aggregator POM of the XNIO project</description>
 
+    <scm>
+        <connection>scm:git:https://github.com/ossnms/xnio.git</connection>
+        <developerConnection>scm:git:https://github.com/ossnms/xnio.git</developerConnection>
+        <url>https://github.com/ossnms/xnio</url>
+    </scm>
+
     <modules>
         <module>api</module>
         <module>nio-impl</module>
@@ -51,6 +57,8 @@
         <version.bridger.plugin>1.0.Final</version.bridger.plugin>
         <version.junit>4.11</version.junit>
         <version.jmock>2.6.0</version.jmock>
+
+        <nexus-host>http://nexus-lis.intra.coriant.com/</nexus-host>
     </properties>
 
     <dependencyManagement>
@@ -134,4 +142,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>TNMS - releases repository</name>
+            <url>${nexus-host}/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+
 </project>
