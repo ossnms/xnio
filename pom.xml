@@ -17,9 +17,7 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -32,14 +30,15 @@
     <artifactId>xnio-all</artifactId>
     <packaging>pom</packaging>
     <name>XNIO Parent POM</name>
-    <version>3.3.7.Final-ossnms-001-SNAPSHOT</version>
+    <version>3.3.7.Final-ossnms-001</version>
     <description>The aggregator POM of the XNIO project</description>
 
     <scm>
         <connection>scm:git:https://github.com/ossnms/xnio.git</connection>
         <developerConnection>scm:git:https://github.com/ossnms/xnio.git</developerConnection>
         <url>https://github.com/ossnms/xnio</url>
-    </scm>
+      <tag>xnio-all-3.3.7.Final-ossnms-001</tag>
+  </scm>
 
     <modules>
         <module>api</module>
