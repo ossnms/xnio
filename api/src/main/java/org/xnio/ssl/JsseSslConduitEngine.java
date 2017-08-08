@@ -350,10 +350,14 @@ final class JsseSslConduitEngine {
         assert ! Thread.holdsLock(getUnwrapLock());
         log.logf(FQCN, Logger.Level.TRACE, null, "Wrapping %s into %s", srcs, dest);
         try {
-            return engine.wrap(srcs, offset, length, dest);
+            SSLEngineResult wrap = engine.wrap(srcs, offset, length, dest);
+            log.logf(FQCN, Logger.Level.TRACE, null, "Result %s", wrap);
+            return wrap;
         } catch (SSLHandshakeException e) {
             try {
-                engine.wrap(srcs, offset, length, dest);
+                log.logf(FQCN, Logger.Level.TRACE, null, "Retrying wrapping");
+                SSLEngineResult result = engine.wrap(srcs, offset, length, dest);
+                log.logf(FQCN, Logger.Level.TRACE, null, "Result %s", result);
                 doFlush();
             } catch (IOException ignore) {}
             throw e;
@@ -401,7 +405,7 @@ final class JsseSslConduitEngine {
                     buffer.flip();
                     try {
                         while (buffer.hasRemaining()) {
-                            final int res = sinkConduit.write(buffer);
+                            final int res = sendToSinkConduit(buffer);
                             if (res == 0) {
                                 return false;
                             }
@@ -435,6 +439,13 @@ final class JsseSslConduitEngine {
             }
         }
         return true;
+    }
+
+    private int sendToSinkConduit(ByteBuffer buffer) throws IOException {
+        log.logf(FQCN, Logger.Level.TRACE, null, "Sending to next conduit %s", buffer);
+        int write = sinkConduit.write(buffer);
+        log.logf(FQCN, Logger.Level.TRACE, null, "Sent to next conduit %s with result %s", buffer, write);
+        return write;
     }
 
     /**
@@ -517,7 +528,7 @@ final class JsseSslConduitEngine {
                    if (result.getHandshakeStatus() == HandshakeStatus.NEED_UNWRAP && engine.isOutboundDone()) {
                         synchronized (getUnwrapLock()) {
                             buffer.compact();
-                            sourceConduit.read(buffer);
+                            readFromSource(buffer);
                             buffer.flip();
                             if (buffer.hasRemaining() && sourceConduit.isReadResumed()) {
                                 sourceConduit.wakeupReads();
@@ -570,6 +581,12 @@ final class JsseSslConduitEngine {
                     throw msg.unexpectedHandshakeStatus(result.getHandshakeStatus());
             }
         }
+    }
+
+    private void readFromSource(ByteBuffer buffer) throws IOException {
+        log.logf(FQCN, Logger.Level.TRACE, null, "Receiving from source to buffer %s", buffer);
+        int read = sourceConduit.read(buffer);
+        log.logf(FQCN, Logger.Level.TRACE, null, "Received from source to buffer %s with bytes read %s", buffer, read);
     }
 
     /**
@@ -698,7 +715,7 @@ final class JsseSslConduitEngine {
         assert Thread.holdsLock(getUnwrapLock());
         if (!buffer.hasRemaining()) {
             buffer.compact();
-            sourceConduit.read(buffer);
+            readFromSource(buffer);
             buffer.flip();
         }
         log.logf(FQCN, Logger.Level.TRACE, null, "Unwrapping %s into %s", buffer, unwrappedBuffer);
@@ -872,7 +889,7 @@ final class JsseSslConduitEngine {
         buffer.flip();
         try {
             while (buffer.hasRemaining()) {
-                final int res = sinkConduit.write(buffer);
+                final int res = sendToSinkConduit(buffer);
                 if (res == 0) {
                     return false;
                 }
