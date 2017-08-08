@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.jboss.xnio</groupId>
         <artifactId>xnio-all</artifactId>
-        <version>3.4.6.Final-ossnms-001</version>
+        <version>3.4.6.Final-ossnms-002-SNAPSHOT</version>
     </parent>
     
     <properties>
